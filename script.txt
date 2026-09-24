@@ -1,0 +1,187 @@
+Voici le script final que tu peux sauvegarder dans un fichier :
+
+Organiser_BaseDoc.ps1
+
+PowerShell
+# =====================================================
+# ORGANISATION BASE DOC
+# =====================================================
+ 
+$root = Read-Host "Chemin du dossier a organiser"
+ 
+# Création des dossiers
+$folders = @(
+"CID",
+"Conditions générales",
+"Formation\Formation Express",
+"Formation\Formation Masterclass",
+"Formation\Scripts",
+"GRC\Charte qualité - IMA",
+"GRC\Charte qualité - WAAS",
+"Liste agents et courtage",
+"Liste des agents non délégataires",
+"Liste des commentaires à mentionner obligatoirement sur les événements",
+"Liste des experts auto",
+"Liste des garages concessionnaires glaciers et experts partenaires",
+"Parcours clients Wafa Assurance",
+"Parcours Wafa Sarii",
+"Process Avance sur réparations",
+"Process BDG inf à 1500 DH",
+"Process Islah Auto Rapide",
+"Prospection commerciale\AWB",
+"Prospection commerciale\Mode opératoire de traitement des leads dans Wafa oTo",
+"Prospection commerciale\Traitement des objections",
+"Prospection commerciale\Wafacach",
+"Prospection commerciale\Wafasalaf",
+"Réforme",
+"Divers"
+)
+ 
+foreach($folder in $folders){
+New-Item -ItemType Directory -Path (Join-Path $root $folder) -Force | Out-Null
+}
+ 
+# Classement des fichiers
+Get-ChildItem $root -File | ForEach-Object {
+ 
+$file = $_.FullName
+$name = $_.Name
+ 
+if($name -match "CID|Convention-d-indemnisation"){
+Move-Item $file "$root\CID" -Force
+}
+ 
+elseif($name -match "CG WAFA"){
+Move-Item $file "$root\Conditions générales" -Force
+}
+ 
+elseif($name -match "Formation express"){
+Move-Item $file "$root\Formation\Formation Express" -Force
+}
+ 
+elseif($name -match "Guide_WafaIMA|Bienvenue|Gestion de la Relation Client|fondamentaux|procédures de gestion des sinistres|Livre Wafa"){
+Move-Item $file "$root\Formation\Formation Masterclass" -Force
+}
+ 
+elseif($name -match "Formation GSA|Questionnaire|Script Appels|SCRIPT LSR"){
+Move-Item $file "$root\Formation\Scripts" -Force
+}
+ 
+elseif($name -match "DQUAL_QRC"){
+Move-Item $file "$root\GRC\Charte qualité - IMA" -Force
+}
+ 
+elseif($name -match "Charte qualité - Plateforme"){
+Move-Item $file "$root\GRC\Charte qualité - WAAS" -Force
+}
+ 
+elseif($name -match "Repertoire agents|Table_Agent|agents et bureaux"){
+Move-Item $file "$root\Liste agents et courtage" -Force
+}
+ 
+elseif($name -match "Liste des agents non délégataires"){
+Move-Item $file "$root\Liste des agents non délégataires" -Force
+}
+ 
+elseif($name -match "commentaires"){
+Move-Item $file "$root\Liste des commentaires à mentionner obligatoirement sur les événements" -Force
+}
+ 
+elseif($name -match "experts Auto|experts auto"){
+Move-Item $file "$root\Liste des experts auto" -Force
+}
+ 
+elseif($name -match "GARAGES|REPARATEURS|réparateurs|concessionnaires|Actualisée|PARETNAIRE"){
+Move-Item $file "$root\Liste des garages concessionnaires glaciers et experts partenaires" -Force
+}
+ 
+elseif($name -match "INSTRUCTION DES DOSSIERS|Parcours_client"){
+Move-Item $file "$root\Parcours clients Wafa Assurance" -Force
+}
+ 
+elseif($name -match "WAFA SARII|Estimations forfaitaires|Présentation estimations"){
+Move-Item $file "$root\Parcours Wafa Sarii" -Force
+}
+ 
+elseif($name -match "Avance sur réparation"){
+Move-Item $file "$root\Process Avance sur réparations" -Force
+}
+ 
+elseif($name -match "BDG|Annexes_Mode"){
+Move-Item $file "$root\Process BDG inf à 1500 DH" -Force
+}
+ 
+elseif($name -match "ISLAH|IAS"){
+Move-Item $file "$root\Process Islah Auto Rapide" -Force
+}
+ 
+elseif($name -match "Campagne|WIA"){
+Move-Item $file "$root\Prospection commerciale\AWB" -Force
+}
+ 
+elseif($name -match "LEADS|SYNERGIE"){
+Move-Item $file "$root\Prospection commerciale\Mode opératoire de traitement des leads dans Wafa oTo" -Force
+}
+ 
+elseif($name -match "objection"){
+Move-Item $file "$root\Prospection commerciale\Traitement des objections" -Force
+}
+ 
+elseif($name -match "Prospection plateforme"){
+Move-Item $file "$root\Prospection commerciale\Wafacach" -Force
+}
+ 
+elseif($name -match "WSF"){
+Move-Item $file "$root\Prospection commerciale\Wafasalaf" -Force
+}
+ 
+elseif($name -match "Réforme|REFORME|reforme"){
+Move-Item $file "$root\Réforme" -Force
+}
+ 
+elseif($name -match "declaration|désistement|Désisteement"){
+Move-Item $file "$root\Divers" -Force
+}
+}
+ 
+# Suppression fichiers temporaires Excel
+Get-ChildItem $root -Recurse -File |
+Where-Object { $_.Name -like '~$*' } |
+Remove-Item -Force -ErrorAction SilentlyContinue
+ 
+Write-Host ""
+Write-Host "Organisation terminée"
+Write-Host ""
+ 
+(Get-ChildItem $root -File).Count
+ 
+tree $root /F /A
+Afficher plus de lignes
+Utilisation
+
+Dans CMD :
+
+BAT
+powershell
+Afficher plus de lignes
+
+Puis :
+
+PowerShell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\Organiser_BaseDoc.ps1
+Afficher plus de lignes
+
+Quand il demande :
+
+Plain Text
+Chemin du dossier a organiser:
+Afficher plus de lignes
+
+tu saisis par exemple :
+
+Plain Text
+C:\Users\amazgour\Downloads\sin-main
+Afficher plus de lignes
+
+Le script créera les dossiers et classera automatiquement les fichiers comme sur ton dossier de référence.
